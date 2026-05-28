@@ -25,10 +25,6 @@ jobs:
         shell: bash
         run: |
           target_host="${{ github.event.inputs.target_host }}"
-          if [[ "$target_host" == .* || "$target_host" == *. || "$target_host" == *..* ]]; then
-            echo "Invalid host format: $target_host"
-            exit 1
-          fi
           if [[ ! "$target_host" =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$ ]]; then
             echo "Invalid host format: $target_host"
             exit 1
