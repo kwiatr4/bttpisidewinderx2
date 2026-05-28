@@ -1,0 +1,25 @@
+name: Tailscale connectivity check
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_host:
+        description: "Host w tailnecie do sprawdzenia (np. raspberrypi.tailnet-name.ts.net)"
+        required: true
+        type: string
+
+jobs:
+  check-tailnet-access:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Check connectivity to target host
+        run: ping -c 4 "${{ github.event.inputs.target_host }}"
