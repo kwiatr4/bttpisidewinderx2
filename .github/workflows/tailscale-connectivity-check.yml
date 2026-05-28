@@ -22,4 +22,11 @@ jobs:
           tags: tag:ci
 
       - name: Check connectivity to target host
-        run: ping -c 4 "${{ github.event.inputs.target_host }}"
+        shell: bash
+        run: |
+          target_host="${{ github.event.inputs.target_host }}"
+          if [[ ! "$target_host" =~ ^[a-zA-Z0-9.-]+$ ]]; then
+            echo "Invalid host format: $target_host"
+            exit 1
+          fi
+          ping -c 4 -- "$target_host"
